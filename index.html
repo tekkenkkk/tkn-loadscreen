@@ -64,7 +64,7 @@
 
             function onVolume() {
                 value = volumeSlider.value
-                volumeSlider.style.background = `linear-gradient(90deg, #ff5500 ${value}%, #5f5f5f ${value}%)`;
+                volumeSlider.style.background = `linear-gradient(90deg, ${Config.mainColor} ${value}%, #5f5f5f ${value}%)`;
                 player.setVolume(value - 1);
                 localStorage.setItem(`volumeSlider-${videoId}`, value);
             }
