@@ -13,7 +13,7 @@ Add following command to server config file:
 ```ensure tkn-loadscreen```
 
 <h1>Config</h1>
-<img style="width: 700px" src="https://i.imgur.com/gkHfi50.png">
+<img style="width: 700px" src="https://i.imgur.com/WH8ByOO.png">
 
 <h1>Preview</h1>
 <img src="https://i.imgur.com/LAWfxSH.png">
