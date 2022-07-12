@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <link rel="stylesheet" href="assets/style.css">
+        <script src="config.js"></script>
+        <script src="assets/particles.js"></script>
+        <script src="assets/dadjokes.js"></script>
+        <title>github.com/tekkenkkk</title>
+    </head>
+
+    <body>
+        <div id="volumePanel">
+            <i class="fas fa-volume-down" style="margin-right: 5px;"></i>
+            <input type="range" min="1" max="100" id="volumeSlider" value="25">
+            <i class="fas fa-volume-up" style="margin-left: 5px;"></i>
+        </div>
+        <div id="particles-js"></div>
+        
+        <script>
+            var videoId = Config.videoId;
+
+            var scriptelement = document.createElement("script");
+            scriptelement.src = "https://www.youtube.com/iframe_api";
+
+            var scripttag = document.getElementsByTagName("script")[0];
+            scripttag.parentNode.insertBefore(scriptelement, scripttag);
+
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player("video", {
+                    videoId: videoId,
+                    playerVars: {"playlist": videoId,"autoplay": 1,"controls": 0,"disablekb": 1,"enablejsapi": 1,"loop": 1,"vq": "highres"},
+                    events: {"onReady": onStart,"onError": onError}
+                });
+            }
+
+            var volumeSlider = document.getElementById("volumeSlider");
+
+            function onStart(event) {
+                var defaultVolume = localStorage.getItem(`volumeSlider-${videoId}`) || 25
+                event.target.setVolume(defaultVolume);
+                event.target.setPlaybackQuality("highres");
+                event.target.playVideo();
+                volumeSlider.setAttribute("value", defaultVolume);
+                onVolume();
+                volumeSlider.addEventListener("input", onVolume, false);
+                document.getElementById("volumePanel").style.left = "-3.5%";
+                if (Config.particlesEnabled) {
+                    particlesJS('particles-js', Config.particlesOptions);
+                }
+                if (Config.dadJokesEnabled) {
+                    document.getElementById("dadJokePanel").style.bottom = "3%";
+                    document.getElementById("dadJoke").innerHTML = `<b>Dad joke</b><br>${dadJoke()}`;
+                }
+                document.getElementById("logo").src = Config.serverLogo;
+                document.getElementById("logo").style.bottom = "3%";
+                document.getElementById("serverPanel").style.bottom = "4%";
+                document.getElementById("discordInvite").innerHTML = Config.serverCredits;
+            }
+
+            function onError() {
+                document.getElementById("video").style.display = "none";
+            }
+
+            function onVolume() {
+                value = volumeSlider.value
+                volumeSlider.style.background = `linear-gradient(90deg, #ff5500 ${value}%, #5f5f5f ${value}%)`;
+                player.setVolume(value - 1);
+                localStorage.setItem(`volumeSlider-${videoId}`, value);
+            }
+        </script>
+        <div id="video"></div>
+        <!-- <div id="videoInputPanel">
+            <h1 id="videoInputText">Change video ID</h1>
+            <input type="text" id="videoInput" placeholder="37MmygNg0bY" autocorrect="off" autocomplete="off">
+        </div> -->
+        <div id="dadJokePanel">
+            <h1 id="dadJoke">Loading...</h1>
+        </div>
+        <img id="logo">
+        <div id="serverPanel">
+            <h1 id="discordInvite" style="font-size: 14px;">Loading...<h1>
+        </div>
+    </body>
+</html>
