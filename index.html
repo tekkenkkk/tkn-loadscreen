@@ -1,10 +1,11 @@
 <html>
     <head>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-        <link rel="stylesheet" href="assets/style.css">
+        <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
+        <link rel="stylesheet" href="assets/styles/style.css">
         <script src="config.js"></script>
-        <script src="assets/particles.js"></script>
-        <script src="assets/dadjokes.js"></script>
+        <script src="assets/scripts/jquery.js"></script>
+        <script src="assets/scripts/particles.js"></script>
+        <script src="assets/scripts/dadjokes.js"></script>
         <title>github.com/tekkenkkk</title>
     </head>
 
@@ -14,72 +15,112 @@
             <input type="range" min="1" max="100" id="volumeSlider" value="25">
             <i class="fas fa-volume-up" style="margin-left: 5px;"></i>
         </div>
+
+        <div id="videoInputPanel">
+            <h1 id="videoInputText">Change video</h1>
+            <input type="text" id="videoInput" placeholder="https://youtube.com/watch?v=K09_5IsgGe8" autocorrect="off" autocomplete="off">
+            <input type="submit" onclick="videoChange()" id="videoInputSubmit" value="Ok">
+        </div>
+
+        <div id="dadJokePanel">
+            <h1 id="dadJoke">Loading...</h1>
+        </div>
+
+        <img id="logo" src="assets/images/logo.png">
+        <div id="serverPanel">
+            <h1 id="discordInvite" style="font-size: 14px;">Loading...<h1>
+        </div>
+
         <div id="particles-js"></div>
         
         <script>
-            var videoId = Config.videoId;
+            let videoId = localStorage.getItem("loadscreen-video") || Config.videoId;
+            let scriptElement
+            let player;
 
-            var scriptelement = document.createElement("script");
-            scriptelement.src = "https://www.youtube.com/iframe_api";
+            const volumeSlider = $("#volumeSlider");
 
-            var scripttag = document.getElementsByTagName("script")[0];
-            scripttag.parentNode.insertBefore(scriptelement, scripttag);
+            function startVideo() {
+                player = null
+                const video = $("#video")
+                if (video.length) {
+                    video.remove()
+                }
+                const elem = $(`<div id="video"></div>`)
+                $("body").append(elem)
 
-            var player;
+                scriptElement = $("<script>");
+                scriptElement.attr("src", "https://www.youtube.com/iframe_api");
+                $("script:first").before(scriptElement);
+                onYouTubeIframeAPIReady("restart")
+            }
+
+            function videoChange() {
+                const rawVidID = $("#videoInput").val();
+                const newVidID = rawVidID.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                const endVideoID = newVidID ? newVidID[1] : null;
+
+                if (!endVideoID) return
+
+                videoId = endVideoID
+                localStorage.setItem("loadscreen-video", endVideoID)
+
+                startVideo()
+            }
+
             function onYouTubeIframeAPIReady() {
                 player = new YT.Player("video", {
                     videoId: videoId,
-                    playerVars: {"playlist": videoId,"autoplay": 1,"controls": 0,"disablekb": 1,"enablejsapi": 1,"loop": 1,"vq": "highres"},
-                    events: {"onReady": onStart,"onError": onError}
+                    playerVars: {
+                        "playlist": videoId,
+                        "autoplay": 1,
+                        "controls": 0,
+                        "disablekb": 1,
+                        "enablejsapi": 1,
+                        "loop": 1,
+                        "vq": "highres"
+                    },
+                    events: {
+                        "onReady": onStart
+                    }
                 });
+
+                fadeElements();
             }
 
-            var volumeSlider = document.getElementById("volumeSlider");
-
             function onStart(event) {
-                var defaultVolume = localStorage.getItem(`volumeSlider-${videoId}`) || 25
+                const defaultVolume = localStorage.getItem(`volumeSlider-${videoId}`) || 25;
                 event.target.setVolume(defaultVolume);
                 event.target.setPlaybackQuality("highres");
                 event.target.playVideo();
-                volumeSlider.setAttribute("value", defaultVolume);
+                volumeSlider.val(defaultVolume);
                 onVolume();
-                volumeSlider.addEventListener("input", onVolume, false);
-                document.getElementById("volumePanel").style.left = "-3.5%";
+                volumeSlider.on("input", onVolume);
+            }
+
+            function onVolume() {
+                const value = volumeSlider.val();
+                volumeSlider.css("background", `linear-gradient(90deg, ${Config.mainColor} ${value}%, #5f5f5f ${value}%)`);
+                player.setVolume(value - 1);
+                localStorage.setItem(`volumeSlider-${videoId}`, value);
+            }
+
+            function fadeElements() {
                 if (Config.particlesEnabled) {
                     particlesJS('particles-js', Config.particlesOptions);
                 }
                 if (Config.dadJokesEnabled) {
-                    document.getElementById("dadJokePanel").style.bottom = "3%";
-                    document.getElementById("dadJoke").innerHTML = `<b>Dad joke</b><br>${dadJoke()}`;
+                    $("#dadJokePanel").css("bottom", "4%");
+                    $("#dadJoke").html(`<b>Dad joke</b><br>${DadJoke()}`);
                 }
-                document.getElementById("logo").src = Config.serverLogo;
-                document.getElementById("logo").style.bottom = "3%";
-                document.getElementById("serverPanel").style.bottom = "4%";
-                document.getElementById("discordInvite").innerHTML = Config.serverCredits;
+                $("#volumePanel").css("left", "-3.5%");
+                $("#videoInputPanel").css("right", "1.5%");
+                $("#logo").css("bottom", "3%");
+                $("#serverPanel").css("bottom", "4%");
+                $("#discordInvite").html(Config.serverCredits);
             }
 
-            function onError() {
-                document.getElementById("video").style.display = "none";
-            }
-
-            function onVolume() {
-                value = volumeSlider.value
-                volumeSlider.style.background = `linear-gradient(90deg, ${Config.mainColor} ${value}%, #5f5f5f ${value}%)`;
-                player.setVolume(value - 1);
-                localStorage.setItem(`volumeSlider-${videoId}`, value);
-            }
+            startVideo();
         </script>
-        <div id="video"></div>
-        <!-- <div id="videoInputPanel">
-            <h1 id="videoInputText">Change video ID</h1>
-            <input type="text" id="videoInput" placeholder="37MmygNg0bY" autocorrect="off" autocomplete="off">
-        </div> -->
-        <div id="dadJokePanel">
-            <h1 id="dadJoke">Loading...</h1>
-        </div>
-        <img id="logo">
-        <div id="serverPanel">
-            <h1 id="discordInvite" style="font-size: 14px;">Loading...<h1>
-        </div>
     </body>
 </html>

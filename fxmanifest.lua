@@ -1,13 +1,13 @@
 fx_version 'bodacious'
 game 'gta5'
 
-author 'github.com/tekkenkkk'
+author 'https://tekken.dev'
 description 'FiveM Loading Screen'
 
 files {
     "config.js",
     "index.html",
-    "assets/*.*"
+    "assets/**/*.*"
 }
 
 loadscreen 'index.html'

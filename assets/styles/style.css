@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+
+head,
+body {
+	background-color: #000;
+	overflow: hidden;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#video {
+	left: 0;
+	top: 0;
+	z-index: -3;
+	position: absolute;
+	border: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#particles-js {
+	z-index: -1;
+	opacity: 0.7;
+}
+
+#volumePanel,
+#dadJokePanel,
+#serverPanel,
+#videoInputPanel {
+	transition: left 1s, bottom 1s;
+	position: absolute;
+	z-index: 1;
+	background: #181818;
+	border-radius: 10px;
+}
+
+#videoInputSubmit:hover {
+	color: #fff;
+}
+#videoInput,
+#videoInputSubmit {
+	padding: 2px 5px;
+	background: rgba(95, 95, 95, 0.1);
+	font-weight: 700;
+	color: #7a7a7a;
+}
+
+#videoInputPanel i {
+	margin-right: 8px;
+}
+
+#videoInputPanel {
+	transition: right 1s;
+	top: 3%;
+	right: -20%;
+	padding-bottom: 8px;
+}
+
+#videoInput,
+#videoInputText {
+	font-family: Poppins;
+	margin: 2px 8px;
+	border: 0;
+	font-size: 12px;
+	outline: 0;
+}
+
+#videoInputText {
+	color: #b3b3b3;
+	margin-top: 7px;
+	margin-left: 8px;
+	font-weight: 700;
+}
+
+#videoInputSubmit {
+	height: 22px;
+	border: 0;
+	outline: 0;
+	margin-right: 10px;
+	border-radius: 5px;
+}
+
+#videoInput {
+	border-radius: 5px;
+}
+
+#videoInput::placeholder {
+	color: #5a5a5a;
+}
+
+#volumePanel {
+	transform: rotate(-90deg);
+	padding: 7px 5px;
+	top: 50%;
+	left: -10%;
+	display: flex;
+	align-items: center;
+}
+
+#serverPanel {
+	padding: 5px 15px;
+	bottom: -10%;
+	left: 6%;
+}
+
+#dadJokePanel {
+	padding: 5px 15px;
+	bottom: -10%;
+	right: 0.7%;
+}
+
+#dadJoke,
+#discordInvite,
+#videoInputText {
+	font-family: Poppins;
+	font-size: 12px;
+	font-weight: 300;
+	color: white;
+}
+
+#volumeSlider {
+	-webkit-appearance: none;
+	height: 5px;
+	outline: 0;
+	border: 0;
+	width: 133px;
+	overflow: visible;
+	border-radius: 20px;
+}
+
+::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 15px;
+	border-radius: 15px;
+	height: 15px;
+	background: #fff;
+}
+
+i {
+	transform: rotate(90deg);
+	font-size: 12px;
+	color: #b3b3b3;
+	padding: 0 5 0 5;
+}
+
+#logo {
+	z-index: -2;
+	position: absolute;
+	bottom: -10%;
+	left: 1.2%;
+	width: 75px;
+	height: 75px;
+	transition: bottom 1s;
+	animation: beat 1s infinite alternate;
+}
+
+@keyframes beat {
+	to {
+		transform: scale(0.8);
+	}
+}
