@@ -4,6 +4,7 @@
 tekkenkkk@github:~$ ./tkn-loadscreen
 ```
 <br>
+
 ![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftekkenkkk%2Ftkn-loadscreen&count_bg=%23a39cff&title_bg=%232A2D33&icon=github.svg&icon_color=%23FFFFFF&title=Visits)
 
 <h1>Usage</h1>
